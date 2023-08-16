@@ -29,13 +29,13 @@ def pick_clue(data):
     return data.sample(1)
 
 if 'category' not in st.session_state:
-    df = pick_clue(data)
-    category, clue = display_clue(df)
-    answer = display_answer(df)    
+    # df = pick_clue(data)
+    # category, clue = display_clue(df)
+    # answer = display_answer(df)    
     
-    st.session_state.category = category
-    st.session_state.clue = clue
-    st.session_state.answer = answer
+    st.session_state.category = ''
+    st.session_state.clue = ''
+    st.session_state.answer = ''
     
 # if clue not in st.session_state:
 #     st.session_state.clue = clue
@@ -54,13 +54,13 @@ def update():
     # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
-    st.session_state.answer = answer
+    # st.session_state.answer = answer
 
 # st.header(category)
 # st.write(clue)
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
-target = st.empty()
+target = st.write(st.session_state.answer)
 
 button = st.button('Show answer', on_click= show_answer())
 new_clue = st.button('New clue', on_click = update())
