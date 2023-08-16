@@ -55,7 +55,7 @@ def update():
     category, clue = display_clue(df)
     answer = display_answer(df)
     
-    st.session_state.answer_button = False
+    # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = answer
