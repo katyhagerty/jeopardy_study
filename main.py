@@ -62,11 +62,11 @@ header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
-button = st.button('Show answer')
+button = st.button('Show answer', on_click= show_answer())
 new_clue = st.button('New clue', on_click = update())
 
-if button:
-    target.write(st.session_state.answer)
+# if button:
+    # target.write(st.session_state.answer)
     
 # if new_clue:
 #     df = pick_clue(data)
