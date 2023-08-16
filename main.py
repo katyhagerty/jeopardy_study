@@ -32,9 +32,12 @@ df = pick_clue(data)
 category, clue = display_clue(df)
 answer = display_answer(df)
 
-st.header(category)
-st.write(clue)
+# st.header(category)
+# st.write(clue)
+header = st.empty()
+clue_text = st.empty()
 target = st.empty()
+
 button = st.button('Show answer')
 new_clue = st.button('New clue')
 
@@ -45,3 +48,5 @@ if new_clue:
     df = pick_clue(data)
     category, clue = display_clue(df)
     answer = display_answer(df)
+    header.write(category)
+    clue_text.write(clue)
