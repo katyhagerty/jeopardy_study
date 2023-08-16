@@ -62,12 +62,7 @@ def update():
 
 # st.header(category)
 # st.write(clue)
-header = st.header(st.session_state.category)
-clue_text = st.write(st.session_state.clue)
-target = st.empty()
 
-button = st.button('Show answer')
-new_clue = st.button('New clue')
 
 if button:
     target.write(st.session_state.answer)
@@ -79,3 +74,10 @@ if new_clue:
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = answer
+    
+header = st.header(st.session_state.category)
+clue_text = st.write(st.session_state.clue)
+target = st.empty()
+
+button = st.button('Show answer')
+new_clue = st.button('New clue')
