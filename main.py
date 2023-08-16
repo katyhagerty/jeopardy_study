@@ -32,7 +32,7 @@ def pick_clue(data):
 
 st.session_state
 
-if category not in st.session_state:
+if 'category' not in st.session_state:
     df = pick_clue(data)
     category, clue = display_clue(df)
     answer = display_answer(df)    
