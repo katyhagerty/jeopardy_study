@@ -62,22 +62,21 @@ def update():
 
 # st.header(category)
 # st.write(clue)
-
-
-if button:
-    target.write(st.session_state.answer)
-    
-if new_clue:
-    df = pick_clue(data)
-    category, clue = display_clue(df)
-    answer = display_answer(df)
-    st.session_state.category = category
-    st.session_state.clue = clue
-    st.session_state.answer = answer
-    
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
 button = st.button('Show answer')
-new_clue = st.button('New clue')
+new_clue = st.button('New clue', on_click = update())
+
+if button:
+    target.write(st.session_state.answer)
+    
+# if new_clue:
+#     df = pick_clue(data)
+#     category, clue = display_clue(df)
+#     answer = display_answer(df)
+#     st.session_state.category = category
+#     st.session_state.clue = clue
+#     st.session_state.answer = answer
+    
