@@ -54,7 +54,7 @@ button = st.button('Show answer')
 new_clue = st.button('New clue')
 
 if button:
-    target.write(session_state.answer)
+    target.write(st.session_state.answer)
     
 if new_clue:
     df = pick_clue(data)
