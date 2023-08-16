@@ -32,21 +32,34 @@ df = pick_clue(data)
 category, clue = display_clue(df)
 answer = display_answer(df)
 
+st.session_state
+
+if category not in st.session_state:
+    st.session_state.category = category
+    
+if clue not in st.session_state:
+    st.session_state.clue = clue
+    
+if answer not in st.session_state:
+    st.session_state.answer = answer
+
+
 # st.header(category)
 # st.write(clue)
-header = st.empty()
-clue_text = st.empty()
+header = st.header(st.session_state.category)
+clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
 button = st.button('Show answer')
 new_clue = st.button('New clue')
 
 if button:
-    target.write(answer)
+    target.write(session_state.answer)
     
 if new_clue:
     df = pick_clue(data)
     category, clue = display_clue(df)
     answer = display_answer(df)
-    header.write(category)
-    clue_text.write(clue)
+    st.session_state.category = category
+    st.session_state.clue = clue
+    st.session_state.answer = answer
