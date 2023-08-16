@@ -44,12 +44,13 @@ if 'category' not in st.session_state:
 #     st.session_state.answer = answer
 
 def show_answer():
-    target.write(st.session_state.answer)
+    answer = display_answer(df)
+    st.session_state.answer = answer
     
 def update():
     df = pick_clue(data)
     category, clue = display_clue(df)
-    answer = display_answer(df)
+    
     
     # st.session_state.answer_button = False
     st.session_state.category = category
