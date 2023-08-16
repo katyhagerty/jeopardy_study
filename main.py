@@ -22,7 +22,7 @@ def display_clue(df):
     clue = df.text.iloc[0]
     return category,clue
     
-def display_target(df):
+def display_answer(df):
     return df.target.iloc[0]
     
 def pick_clue(data):
@@ -30,17 +30,18 @@ def pick_clue(data):
 
 df = pick_clue(data)
 category, clue = display_clue(df)
-target = display_target(df)
+answer = display_answer(df)
 
 st.header(category)
 st.write(clue)
-target = st.write('')
+target = st.empty()
 button = st.button('Show answer')
 new_clue = st.button('New clue')
+
 if button:
-    target.write(target)
+    target.write(answer)
     
 if new_clue:
     df = pick_clue(data)
     category, clue = display_clue(df)
-    target = display_target(df)
+    answer = display_answer(df)
