@@ -55,7 +55,7 @@ def update():
     category, clue = display_clue(df)
     answer = display_answer(df)
     
-    st.session_state.button = False
+    st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = answer
@@ -66,7 +66,7 @@ header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
-button = st.button('Show answer', key = 'button', on_click = show_answer())
+button = st.button('Show answer', key = 'answer_button', on_click = show_answer())
 new_clue = st.button('New clue', on_click = update())
 
 # if button:
