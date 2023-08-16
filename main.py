@@ -28,10 +28,6 @@ def display_answer(df):
 def pick_clue(data):
     return data.sample(1)
 
-
-
-st.session_state
-
 if 'category' not in st.session_state:
     df = pick_clue(data)
     category, clue = display_clue(df)
