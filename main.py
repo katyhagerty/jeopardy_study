@@ -7,6 +7,7 @@ Created on Tue Aug 15 21:37:39 2023
 """
 
 import streamlit as st
+import pandas as pd
 
 loc = 'clues.csv'
 
