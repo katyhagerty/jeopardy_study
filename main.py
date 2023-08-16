@@ -51,6 +51,10 @@ def show_answer():
     target.write(st.session_state.answer)
     
 def update():
+    df = pick_clue(data)
+    category, clue = display_clue(df)
+    answer = display_answer(df)
+    
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = answer
