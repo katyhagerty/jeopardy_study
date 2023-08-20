@@ -34,6 +34,7 @@ def show_answer():
     target.write(st.session_state.answer)
     
 def update():
+    data = load_data(loc)
     df = pick_clue(data)
     category, clue = display_clue(df)
     
