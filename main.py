@@ -11,11 +11,11 @@ import pandas as pd
 
 loc = 'clues.csv'
 
-st.cache()
+st.cache_data()
 def load_data(loc):
     return pd.read_csv(loc)
 
-data = load_data(loc)
+# data = load_data(loc)
 
 def display_clue(df):
     category = df.category.iloc[0].upper()
@@ -43,9 +43,12 @@ def update():
     st.session_state.clue = clue
     st.session_state.answer = df.target.iloc[0]
     
+    
     # return df
     
 if 'category' not in st.session_state:
+    'category not in session state'
+    data = load_data(loc)
     update()
 
 header = st.header(st.session_state.category)
