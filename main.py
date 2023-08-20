@@ -31,7 +31,9 @@ def pick_clue(data):
 def show_answer():
     # answer = df.target.iloc[0]
     # st.session_state.answer = answer
-    target.write(st.session_state.answer)
+    # target.write(st.session_state.answer)
+    'show_answer'
+    st.session_state.answer
     
 def update():
     data = load_data(loc)
@@ -54,7 +56,7 @@ if 'category' not in st.session_state:
 
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
-target = st.empty()
+# target = st.empty()
 
 button = st.button('Show answer', on_click= show_answer())
 new_clue = st.button('New clue', on_click = update())
