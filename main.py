@@ -46,7 +46,7 @@ def update():
     return df
     
 if 'category' not in st.session_state:
-    df = update()
+    update()
 
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
