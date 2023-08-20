@@ -43,7 +43,7 @@ def update():
     st.session_state.clue = clue
     st.session_state.answer = df.target.iloc[0]
     
-    return df
+    # return df
     
 if 'category' not in st.session_state:
     update()
