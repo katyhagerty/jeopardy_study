@@ -28,9 +28,10 @@ def display_clue(df):
 def pick_clue(data):
     return data.sample(1)
 
-def show_answer(df):
-    answer = df.target.iloc[0]
-    st.session_state.answer = answer
+def show_answer():
+    # answer = df.target.iloc[0]
+    # st.session_state.answer = answer
+    target.write(st.session_state.answer)
     
 def update():
     df = pick_clue(data)
@@ -40,7 +41,7 @@ def update():
     # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
-    st.session_state.answer = ''
+    st.session_state.answer = df.target.iloc[0]
     
     return df
     
@@ -49,9 +50,13 @@ if 'category' not in st.session_state:
 
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
-target = st.write(st.session_state.answer)
 
-button = st.button('Show answer', on_click= show_answer(df))
+if button:
+    target = st.write(st.session_state.answer)
+else:
+    target = st.empty()
+
+button = st.button('Show answer', on_click= show_answer()))
 new_clue = st.button('New clue', on_click = update())
 
     
