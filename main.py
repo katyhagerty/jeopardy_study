@@ -53,19 +53,22 @@ if 'category' not in st.session_state:
     data = load_data(loc)
     update()
 
-header = st.header(st.session_state.category)
-clue_text = st.write(st.session_state.clue)
-target = st.empty()
+
 
 # on_click called with every update even if button was not clicked prior
 button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
 
+header = st.header(st.session_state.category)
+clue_text = st.write(st.session_state.clue)
+# target = st.empty()
+    
+if new_clue:
+    update()
+
 if button:
     target = st.write(st.session_state.answer)
 else:
     target = st.empty()
-    
-if new_clue:
-    update()
+
     
