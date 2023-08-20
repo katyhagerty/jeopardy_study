@@ -52,7 +52,7 @@ header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 
 button = st.button('Show answer')#, on_click= show_answer())
-new_clue = st.button('New clue')#, on_click = update())
+new_clue = st.button('New clue', on_click = update())
 
 if button:
     target = st.write(st.session_state.answer)
