@@ -22,29 +22,14 @@ def display_clue(df):
     clue = df.text.iloc[0]
     return category,clue
     
-def display_answer(df):
-    return df.target.iloc[0]
+# def display_answer(df):
+#     return df.target.iloc[0]
     
 def pick_clue(data):
     return data.sample(1)
 
-if 'category' not in st.session_state:
-    # df = pick_clue(data)
-    # category, clue = display_clue(df)
-    # answer = display_answer(df)    
-    
-    st.session_state.category = ''
-    st.session_state.clue = ''
-    st.session_state.answer = ''
-    
-# if clue not in st.session_state:
-#     st.session_state.clue = clue
-    
-# if answer not in st.session_state:
-#     st.session_state.answer = answer
-
-def show_answer():
-    answer = display_answer(df)
+def show_answer(df):
+    answer = df.target.iloc[0]
     st.session_state.answer = answer
     
 def update():
@@ -55,25 +40,18 @@ def update():
     # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
-    # st.session_state.answer = answer
+    st.session_state.answer = ''
+    
+    return df
+    
+if 'category' not in st.session_state:
+    df = update()
 
-# st.header(category)
-# st.write(clue)
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.write(st.session_state.answer)
 
-button = st.button('Show answer', on_click= show_answer())
+button = st.button('Show answer', on_click= show_answer(df))
 new_clue = st.button('New clue', on_click = update())
 
-# if button:
-    # target.write(st.session_state.answer)
-    
-# if new_clue:
-#     df = pick_clue(data)
-#     category, clue = display_clue(df)
-#     answer = display_answer(df)
-#     st.session_state.category = category
-#     st.session_state.clue = clue
-#     st.session_state.answer = answer
     
