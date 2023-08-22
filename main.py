@@ -57,7 +57,7 @@ def update():
     
 def find_choices():
     all_data = pd.read_csv('clues.csv')
-    cats = all_data.groupby(by = 'category').count()
+    cats = all_data.groupby(by = 'category').count().reset_index()
     options = set(cats[cats['round_'] >= 100].category)
     st.session_state.choices = options
     
