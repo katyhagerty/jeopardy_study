@@ -86,7 +86,7 @@ if 'choices' not in st.session_state:
 
 print(st.session_state)
 
-filter_cat = st.multiselect('Categories', ['geography', 'presidents'], key = 'filter_cat')
+filter_cat = st.multiselect('Categories', st.session_state.choices, key = 'filter_cat')
 
 if new_clue:
     update()
