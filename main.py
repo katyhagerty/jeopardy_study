@@ -63,7 +63,6 @@ if 'category' not in st.session_state:
 st.checkbox(
     label="Save",
     key="switch_1",
-    default_value=False,
     # label_after="Saving session",
 )
 
