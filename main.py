@@ -12,7 +12,6 @@ import pandas as pd
 
 loc = 'all_clues.csv'
 
-st.session_state
 
 st.cache_data()
 def load_data(loc):
@@ -103,3 +102,4 @@ else:
     target = st.empty()
 
     
+st.session_state
