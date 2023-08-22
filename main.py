@@ -48,15 +48,18 @@ def update():
     df = pick_clue(data)
     category, clue = display_clue(df)
     
-    cats = data.groupby(by = 'category').count()
-    options = set(cats[cats['round_'] >= 100].category)
-    st.session_state.choices = options
     # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = df.target.iloc[0]
     
     # return df
+    
+def find_choices():
+    all_data = pd.read_csv('clues.csv')
+    cats = all_data.groupby(by = 'category').count()
+    options = set(cats[cats['round_'] >= 100].category)
+    st.session_state.choices = options
     
 if 'category' not in st.session_state:
     # 'category not in session state'
@@ -72,6 +75,10 @@ st.checkbox(
 # on_click called with every update even if button was not clicked prior
 button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
+
+if 'choices' not in st.session_state:
+    find_choices()
+
 filter_cat = st.multiselect('Categories', st.session_state.choices, key = 'filter_cat')
 
 if new_clue:
