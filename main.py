@@ -48,6 +48,9 @@ def update():
     df = pick_clue(data)
     category, clue = display_clue(df)
     
+    cats = data.groupby(by = 'category').count()
+    options = set(cats[cats['round'] >= 100].category)
+    st.session_state.options = options
     # st.session_state.answer_button = False
     st.session_state.category = category
     st.session_state.clue = clue
@@ -69,9 +72,7 @@ st.checkbox(
 # on_click called with every update even if button was not clicked prior
 button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
-cats = data.groupby(by = 'category').count()
-options = set(cats[cats['round'] >= 100].category)
-filter_cat = st.multiselect('Categories', options, key = 'filter_cat')
+filter_cat = st.multiselect('Categories', st.session_state.options, key = 'filter_cat')
 
 if new_clue:
     update()
