@@ -8,12 +8,19 @@ Created on Tue Aug 15 21:37:39 2023
 
 import streamlit as st
 import pandas as pd
+from streamlit_toggle import st_toggle_switch
 
 loc = 'clues.csv'
 
 st.cache_data()
 def load_data(loc):
-    return pd.read_csv(loc)
+    data = pd.read_csv(loc)
+    
+    if 'filter_cat' in st.session_state:
+        if st.session_state.filter_cat != '':
+            data = data[data.category.isin(st.session_state.filter_cat)]
+    
+    return data
 
 # data = load_data(loc)
 
@@ -49,15 +56,23 @@ def update():
     # return df
     
 if 'category' not in st.session_state:
-    'category not in session state'
+    # 'category not in session state'
     data = load_data(loc)
     update()
 
-
+st_toggle_switch(
+    label="Save",
+    key="switch_1",
+    default_value=False,
+    label_after="Saving session",
+)
 
 # on_click called with every update even if button was not clicked prior
 button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
+cats = data.groupby(by = 'category').count()
+options = set(cats[cats['round'] >= 100].category)
+filter_cat = st.multiselect('Categories', options, key = 'filter_cat')
 
 if new_clue:
     update()
@@ -66,7 +81,6 @@ header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 # target = st.empty()
     
-
 
 if button:
     target = st.write(st.session_state.answer)
