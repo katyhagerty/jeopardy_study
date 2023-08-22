@@ -8,7 +8,7 @@ Created on Tue Aug 15 21:37:39 2023
 
 import streamlit as st
 import pandas as pd
-from streamlit_toggle import st_toggle_switch
+# from streamlit_toggle import st_toggle_switch
 
 loc = 'clues.csv'
 
@@ -60,11 +60,11 @@ if 'category' not in st.session_state:
     data = load_data(loc)
     update()
 
-st_toggle_switch(
+st.checkbox(
     label="Save",
     key="switch_1",
     default_value=False,
-    label_after="Saving session",
+    # label_after="Saving session",
 )
 
 # on_click called with every update even if button was not clicked prior
