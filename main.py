@@ -12,12 +12,14 @@ import pandas as pd
 
 loc = 'all_clues.csv'
 
+st.session_state
+
 st.cache_data()
 def load_data(loc):
     data = pd.read_csv(loc)
     
     if 'filter_cat' in st.session_state:
-        if st.session_state.filter_cat != '':
+        if len(st.session_state.filter_cat) > 0:
             data = data[data.category.isin(st.session_state.filter_cat)]
     
     return data
