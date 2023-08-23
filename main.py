@@ -85,7 +85,7 @@ button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
 correct = st.button('Correct', on_click = record)
 
-if 'choices' not in st.session_state:
+if 'choices' or 'rounds' not in st.session_state:
     all_data = pd.read_csv('all_clues.csv')
     cats = all_data.groupby(by = 'category').count().reset_index()
     options = list(set(cats[cats['round_'] >= 100].category))
