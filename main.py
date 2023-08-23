@@ -66,7 +66,7 @@ def update():
 
 def record():
     data = load_data(loc)
-    data.iloc[st.session_state.id, 'correct'] = 1
+    data.iloc[int(st.session_state.id), 'correct'] = 1
     data.to_csv(loc)
     
 if 'category' not in st.session_state:
