@@ -10,7 +10,7 @@ import streamlit as st
 import pandas as pd
 # from streamlit_toggle import st_toggle_switch
 
-loc = 'all_clues.csv'
+loc = 'all_data_v2.csv'
 
 
 st.cache_data()
@@ -49,6 +49,7 @@ def update():
     df = pick_clue(data)
     category, clue = display_clue(df)
     
+    st.session_state.id = df.index[0]
     st.session_state.category = category
     st.session_state.clue = clue
     st.session_state.answer = df.target.iloc[0]
@@ -62,6 +63,11 @@ def update():
 #     st.session_state.choices = options
     
 #     return st.session_state.choices
+
+def record():
+    data = load_data(loc)
+    data.iloc[st.session_state.id, 'correct'] = 1
+    data.to_csv(loc)
     
 if 'category' not in st.session_state:
     # 'category not in session state'
@@ -77,16 +83,18 @@ st.checkbox(
 # on_click called with every update even if button was not clicked prior
 button = st.button('Show answer') #, on_click= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
+correct = st.button('Correct', on_click = record)
 
 if 'choices' not in st.session_state:
     all_data = pd.read_csv('all_clues.csv')
     cats = all_data.groupby(by = 'category').count().reset_index()
     options = list(set(cats[cats['round_'] >= 100].category))
     st.session_state['choices'] = options
-
-print(st.session_state)
+    st.session_state['rounds'] = list(set(all_data.round_))
+# print(st.session_state)
 
 filter_cat = st.multiselect('Categories', st.session_state.choices, key = 'filter_cat')
+filter_round = st.multiselect('Round', st.session_state.rounds, key = 'filter_round')
 
 if new_clue:
     update()
@@ -102,4 +110,4 @@ else:
     target = st.empty()
 
     
-st.session_state
+# st.session_state
