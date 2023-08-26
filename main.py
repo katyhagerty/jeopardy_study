@@ -35,6 +35,7 @@ client = create_connection()
 
 
 def run_query(query):
+    st.write(query)
     query_job = client.query(query)
     rows_raw = query_job.result()
     # Convert to list of dicts. Required for st.cache_data to hash the return value.
@@ -80,11 +81,10 @@ def update():
     # data = load_data(loc)
     # df = pick_clue(data)
     # category, clue = display_clue(df)
-    if 'filter_cat' in st.session_state:
-        if len(st.session_state.filter_cat) > 0:
-            cats = tuple(st.session_state.filter_cat)
-            rows = run_query(
-                f"SELECT * FROM `jeopardy-396902.jeopardy.clues` WHERE category IN {cats} order by RAND() LIMIT 1")
+    if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
+        cats = tuple(st.session_state.filter_cat)
+        rows = run_query(
+            f"SELECT * FROM `jeopardy-396902.jeopardy.clues` WHERE category IN {cats} order by RAND() LIMIT 1")
     else:
         rows = run_query(
             'SELECT * FROM `jeopardy-396902.jeopardy.clues` order by RAND() LIMIT 1')
