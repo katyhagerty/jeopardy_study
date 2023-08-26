@@ -84,6 +84,7 @@ def update():
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
         st.write('In update() if statement')
         cats = str(st.session_state.filter_cat)
+        st.write(f'input parameter {cats}')
         cats = cats.replace('[','(')
         cats = cats.replace(']',')')
         rows = run_query(
