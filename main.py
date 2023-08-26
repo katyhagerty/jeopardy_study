@@ -82,11 +82,11 @@ def update():
     # df = pick_clue(data)
     # category, clue = display_clue(df)
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
-        st.write('In update() if statement')
+        # st.write('In update() if statement')
         cats = str(st.session_state.filter_cat)
-        st.write(f'input parameter {cats}')
         cats = cats.replace('[','(')
         cats = cats.replace(']',')')
+        # st.write(f'input parameter {cats}')
         rows = run_query(
             f"SELECT * FROM `jeopardy-396902.jeopardy.clues` WHERE category IN {cats} order by RAND() LIMIT 1")
     else:
@@ -99,8 +99,8 @@ def update():
     #     rows = run_query(f'SELECT * FROM `jeopardy-396902.jeopardy.clues` WHERE category IN {cats} order by RAND() LIMIT 1')
     # else:
     #     rows = run_query('SELECT * FROM `jeopardy-396902.jeopardy.clues` order by RAND() LIMIT 1')
-    rows = run_query(
-        'SELECT * FROM `jeopardy-396902.jeopardy.clues` order by RAND() LIMIT 1')
+    # rows = run_query(
+        # 'SELECT * FROM `jeopardy-396902.jeopardy.clues` order by RAND() LIMIT 1')
     # st.session_state.id =
     st.session_state.category = rows[0]['category']
     st.session_state.clue = rows[0]['text']
