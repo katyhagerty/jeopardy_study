@@ -82,6 +82,7 @@ def update():
     # df = pick_clue(data)
     # category, clue = display_clue(df)
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
+        st.write('In update() if statement')
         cats = str(st.session_state.filter_cat)
         cats = cats.replace('[','(')
         cats = cats.replace(']',')')
