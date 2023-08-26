@@ -82,7 +82,9 @@ def update():
     # df = pick_clue(data)
     # category, clue = display_clue(df)
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
-        cats = f"({','.join(st.session_state.filter_cat)})"
+        cats = str(st.session_state.filter_cat)
+        cats = cats.replace('[','(')
+        cats = cats.replace(']',')')
         rows = run_query(
             f"SELECT * FROM `jeopardy-396902.jeopardy.clues` WHERE category IN {cats} order by RAND() LIMIT 1")
     else:
