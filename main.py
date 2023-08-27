@@ -17,7 +17,7 @@ from google.cloud import bigquery
 
 @st.cache_resource
 def create_connection():
-    create_connection
+    # create_connection
     credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"])
     client = bigquery.Client(credentials=credentials)
