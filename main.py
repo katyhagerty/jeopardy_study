@@ -15,7 +15,7 @@ from google.cloud import bigquery
 # Create API client.
 
 
-@st.cache_resource
+# @st.cache_resource(ttl = 24*3600)
 def create_connection():
     # create_connection
     credentials = service_account.Credentials.from_service_account_info(
