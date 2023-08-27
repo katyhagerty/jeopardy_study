@@ -55,7 +55,8 @@ def update():
     filters = ' AND '.join(filters)
     
     query_text = f'SELECT * FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 1'
-
+    rows = run_query(query_text)
+    
     st.session_state.category = rows[0]['category']
     st.session_state.clue = rows[0]['text']
     st.session_state.answer = rows[0]['target']
