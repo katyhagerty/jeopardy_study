@@ -54,12 +54,17 @@ def update():
         
     filters = ' AND '.join(filters)
     
-    query_text = f'SELECT * FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 1'
+    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 1'
     rows = run_query(query_text)
     
+    st.session_state.id = rows[0]['id']
     st.session_state.category = rows[0]['category']
     st.session_state.clue = rows[0]['text']
     st.session_state.answer = rows[0]['target']
+    
+def show_answer():
+    if button:
+        target.write(st.session_state.answer)
 
 def record():
     data = load_data(loc)
@@ -76,8 +81,9 @@ st.checkbox(
     # label_after="Saving session",
 )
 
-button = st.button('Show answer')  # , on_click= show_answer())
-new_clue = st.button('New clue')  # , on_click = update())
+button = st.button('Show answer') #, on_change= show_answer())
+new_clue = st.button('New clue') #, on_click = update())
+correct = st.button('Correct')
 
 if 'choices' or 'rounds' not in st.session_state:
     options = pd.DataFrame(run_query('SELECT category, COUNT(category) AS count FROM `jeopardy-396902.jeopardy.clues`  group by category HAVING count > 100'))
@@ -94,6 +100,7 @@ if new_clue:
 
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
+target = st.empty()
 
 
 if button:
@@ -101,5 +108,6 @@ if button:
 else:
     target = st.empty()
 
-
+if correct:
+    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
 # st.session_state
