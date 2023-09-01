@@ -12,6 +12,8 @@ import pandas as pd
 from google.oauth2 import service_account
 from google.cloud import bigquery
 
+import time
+
 # Create API client.
 
 
@@ -41,26 +43,42 @@ def reformat(text):
     return text
 
 def update():
-    filters = []
+    
+    filters = ['correct = 0']
     
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
         cats = reformat(str(st.session_state.filter_cat))
         # st.write(f'input parameter {cats}')
-        filters.append(f'WHERE category IN {cats}')
+        filters.append(f'category IN {cats}')
         
     if 'filter_round' in st.session_state and len(st.session_state.filter_round) > 0:
         rounds = reformat(str(st.session_state.filter_round))
-        filters.append(f'WHERE _round IN {rounds}')
+        filters.append(f'round_ IN {rounds}')
+
+    if len(filters) > 1:
+        filters = 'WHERE ' + ' AND '.join(filters)
+    else:
+        filters = f'WHERE {filters[0]}'
         
-    filters = ' AND '.join(filters)
-    
-    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 1'
+    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 100'
+    query_text
     rows = run_query(query_text)
+    st.session_state.df = pd.DataFrame(rows)
     
-    st.session_state.id = rows[0]['id']
-    st.session_state.category = rows[0]['category']
-    st.session_state.clue = rows[0]['text']
-    st.session_state.answer = rows[0]['target']
+    pick_clue()
+    
+def pick_clue():
+    rows = st.session_state.df
+    
+    st.session_state.id = rows['id'].iloc[0]
+    st.session_state.category = rows['category'].iloc[0]
+    st.session_state.clue = rows['text'].iloc[0]
+    st.session_state.answer = rows['target'].iloc[0]
+    
+    ind = rows.index[0]
+    
+    rows = rows.drop([ind])
+    st.session_state.df = rows
     
 def show_answer():
     if button:
@@ -74,6 +92,7 @@ def record():
 
 if 'category' not in st.session_state:
     update()
+    # pick_clue()
 
 st.checkbox(
     label="Save",
@@ -91,23 +110,38 @@ if 'choices' or 'rounds' not in st.session_state:
     st.session_state['choices'] = list(options.category)
     rounds = pd.DataFrame(run_query('SELECT DISTINCT round_ FROM `jeopardy-396902.jeopardy.clues`'))
     st.session_state['rounds'] = list(rounds.round_)
+    
+if 'correct_answers' not in st.session_state:
+    st.session_state.correct_answers = []
 
-filter_cat = st.multiselect('Categories', st.session_state.choices, key='filter_cat')
-filter_round = st.multiselect('Round', st.session_state.rounds, key='filter_round')
+filter_cat = st.multiselect('Categories', st.session_state.choices, key='filter_cat', on_change = update)
+filter_round = st.multiselect('Round', st.session_state.rounds, key='filter_round', on_change = update)
 
 if new_clue:
-    update()
-
-header = st.header(st.session_state.category)
-clue_text = st.write(st.session_state.clue)
-target = st.empty()
-
+    # update()
+    pick_clue()
+    
+if correct:
+    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
+    # st.session_state.correct_answers += st.session_state.id
+    pick_clue()
+# st.session_state
 
 if button:
     target = st.write(st.session_state.answer)
 else:
     target = st.empty()
 
-if correct:
-    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-# st.session_state
+header = st.header(st.session_state.category)
+clue_text = st.write(st.session_state.clue)
+target = st.empty()
+
+
+if len(st.session_state.df) == 0:
+    update()
+    
+if len(st.session_state.correct_answers) > 0:
+    correct_answers = reformat(str(st.session_state.correct_answers))
+    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
+    time.sleep(300)
+st.session_state
