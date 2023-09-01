@@ -132,7 +132,9 @@ if correct:
 
 if save:
     correct_answers = reformat(str(st.session_state.correct_answers))
-    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
+    query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
+    query
+    run_query(query)
 
 if button:
     target = st.write(st.session_state.answer)
