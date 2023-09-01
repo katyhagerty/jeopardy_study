@@ -126,7 +126,8 @@ if 'correct_answers' not in st.session_state:
 filter_cat = st.multiselect('Categories', st.session_state.choices, key='filter_cat', on_change = update)
 filter_round = st.multiselect('Round', st.session_state.rounds, key='filter_round', on_change = update)
 
-len(st.session_state.df)
+df = st.session_state.df
+len(df)
 if len(st.session_state.df) == 0:
     update()
 
