@@ -66,7 +66,7 @@ def update():
     else:
         filters = f'WHERE {filters[0]}'
         
-    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 5'
+    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 100'
     # query_text
     rows = run_query(query_text)
     
@@ -103,12 +103,6 @@ def record():
 if 'category' not in st.session_state:
     update()
     # pick_clue()
-
-st.checkbox(
-    label="Save",
-    key="switch_1",
-    # label_after="Saving session",
-)
 
 button = st.button('Show answer') #, on_change= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
