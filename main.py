@@ -103,9 +103,10 @@ st.checkbox(
 button = st.button('Show answer') #, on_change= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
 correct = st.button('Correct')
+save = st.button('Save')
 
 if 'choices' not in st.session_state:
-    options = pd.DataFrame(run_query('SELECT category, COUNT(category) AS count FROM `jeopardy-396902.jeopardy.clues`  group by category HAVING count > 100'))
+    options = pd.DataFrame(run_query('SELECT category, COUNT(category) AS count FROM `jeopardy-396902.jeopardy.clues` group by category HAVING count > 100'))
     options.sort_values(by = 'category', inplace = True)
     st.session_state['choices'] = list(options.category)
     
@@ -124,10 +125,14 @@ if new_clue:
     pick_clue()
     
 if correct:
-    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-    # st.session_state.correct_answers += st.session_state.id
+    # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
+    st.session_state.correct_answers += st.session_state.id
     pick_clue()
 # st.session_state
+
+if save:
+    correct_answers = reformat(str(st.session_state.correct_answers))
+    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
 
 if button:
     target = st.write(st.session_state.answer)
@@ -142,8 +147,8 @@ target = st.empty()
 if len(st.session_state.df) == 0:
     update()
     
-if correct:
-    run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
+# if correct:
+    # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
     
 # if len(st.session_state.correct_answers) > 0:
 #     correct_answers = reformat(str(st.session_state.correct_answers))
