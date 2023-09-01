@@ -104,10 +104,12 @@ button = st.button('Show answer') #, on_change= show_answer())
 new_clue = st.button('New clue') #, on_click = update())
 correct = st.button('Correct')
 
-if 'choices' or 'rounds' not in st.session_state:
+if 'choices' not in st.session_state:
     options = pd.DataFrame(run_query('SELECT category, COUNT(category) AS count FROM `jeopardy-396902.jeopardy.clues`  group by category HAVING count > 100'))
     options.sort_values(by = 'category', inplace = True)
     st.session_state['choices'] = list(options.category)
+    
+if 'rounds' not in st.session_state:
     rounds = pd.DataFrame(run_query('SELECT DISTINCT round_ FROM `jeopardy-396902.jeopardy.clues`'))
     st.session_state['rounds'] = list(rounds.round_)
     
