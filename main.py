@@ -35,6 +35,7 @@ client = create_connection()
 
 def run_query(query):
     # st.write(query)
+    st.cache_data.clear()
     query_job = client.query(query)
     rows_raw = query_job.result()
     # Convert to list of dicts. Required for st.cache_data to hash the return value.
