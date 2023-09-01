@@ -16,8 +16,13 @@ import time
 
 # Create API client.
 
+def clues_remaining():
+    if 'df' in st.session_state:
+        if len(st.session_state.df) == 0:
+            return False
+    return True
 
-@st.cache_resource(ttl = 24*3600)
+@st.cache_resource(ttl = 24*3600, validate = clues_remaining)
 def create_connection():
     # create_connection
     credentials = service_account.Credentials.from_service_account_info(
