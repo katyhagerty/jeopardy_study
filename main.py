@@ -17,7 +17,7 @@ import time
 # Create API client.
 
 
-# @st.cache_resource(ttl = 24*3600)
+@st.cache_resource(ttl = 24*3600)
 def create_connection():
     # create_connection
     credentials = service_account.Credentials.from_service_account_info(
@@ -137,6 +137,7 @@ if save:
     query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
     query
     run_query(query)
+    st.session_state.correct_answers = []
 
 if button:
     target = st.write(st.session_state.answer)
