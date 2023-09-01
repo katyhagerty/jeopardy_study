@@ -140,8 +140,11 @@ target = st.empty()
 if len(st.session_state.df) == 0:
     update()
     
-if len(st.session_state.correct_answers) > 0:
-    correct_answers = reformat(str(st.session_state.correct_answers))
+if correct:
     run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
-    time.sleep(300)
-st.session_state
+    
+# if len(st.session_state.correct_answers) > 0:
+#     correct_answers = reformat(str(st.session_state.correct_answers))
+#     run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
+#     time.sleep(300)
+# st.session_state
