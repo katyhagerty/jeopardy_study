@@ -126,7 +126,9 @@ if new_clue:
     
 if correct:
     # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-    st.session_state.correct_answers += st.session_state.id
+    correct_answers = st.session_state.correct_answers
+    correct_answers.append(st.session_state.id)
+    st.session_state.correct_answers = correct_answers
     pick_clue()
 # st.session_state
 
