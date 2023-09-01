@@ -22,7 +22,7 @@ def clues_remaining():
             return False
     return True
 
-# @st.cache_resource(ttl = 24*3600) #, validate = clues_remaining)
+@st.cache_resource(ttl = 24*3600) #, validate = clues_remaining)
 def create_connection():
     # create_connection
     credentials = service_account.Credentials.from_service_account_info(
@@ -67,11 +67,15 @@ def update():
         filters = f'WHERE {filters[0]}'
         
     query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 5'
-    query_text
+    # query_text
     rows = run_query(query_text)
-    st.session_state.df = pd.DataFrame(rows)
     
-    pick_clue()
+    if len(rows) == 0:
+        st.balloons()
+        st.info('You already no all the clues that match these filters. Please change filter options')
+    else:
+        st.session_state.df = pd.DataFrame(rows)    
+        pick_clue()
     
 def pick_clue():
     rows = st.session_state.df
@@ -127,8 +131,9 @@ filter_cat = st.multiselect('Categories', st.session_state.choices, key='filter_
 filter_round = st.multiselect('Round', st.session_state.rounds, key='filter_round', on_change = update)
 
 df = st.session_state.df
-len(df)
-if len(st.session_state.df) == 0:
+# str(len(df))
+if len(df) == 0:
+    'df len is 0'
     update()
 
 if new_clue:
@@ -146,7 +151,7 @@ if correct:
 if save:
     correct_answers = reformat(str(st.session_state.correct_answers))
     query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
-    query
+    # query
     run_query(query)
     st.session_state.correct_answers = []
 
@@ -169,4 +174,4 @@ target = st.empty()
 #     correct_answers = reformat(str(st.session_state.correct_answers))
 #     run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
 #     time.sleep(300)
-st.session_state
+# st.session_state
