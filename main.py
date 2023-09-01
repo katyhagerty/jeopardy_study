@@ -22,7 +22,7 @@ def clues_remaining():
             return False
     return True
 
-@st.cache_resource(ttl = 24*3600) #, validate = clues_remaining)
+# @st.cache_resource(ttl = 24*3600) #, validate = clues_remaining)
 def create_connection():
     # create_connection
     credentials = service_account.Credentials.from_service_account_info(
