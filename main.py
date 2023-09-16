@@ -158,10 +158,12 @@ if correct:
 
 
 def save():
-    correct_answers = reformat(str(st.session_state.correct_answers))
-    query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
-    run_query(query)
-    st.session_state.correct_answers = []
+    correct = st.session_state.correct_answers
+    if len(correct) > 0:
+        correct_answers = reformat(str(st.session_state.correct_answers))
+        query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
+        run_query(query)
+        st.session_state.correct_answers = []
 
 
 if save:
