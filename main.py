@@ -86,17 +86,21 @@ def update():
 
 
 def pick_clue():
-    rows = st.session_state.df
-
-    st.session_state.id = rows['id'].iloc[0]
-    st.session_state.category = rows['category'].iloc[0]
-    st.session_state.clue = rows['text'].iloc[0]
-    st.session_state.answer = rows['target'].iloc[0]
-
-    ind = rows.index[0]
-
-    rows = rows.drop([ind])
-    st.session_state.df = rows
+    if len(st.session_state.df) == 0:
+        update()
+    else:
+        
+        rows = st.session_state.df
+    
+        st.session_state.id = rows['id'].iloc[0]
+        st.session_state.category = rows['category'].iloc[0]
+        st.session_state.clue = rows['text'].iloc[0]
+        st.session_state.answer = rows['target'].iloc[0]
+    
+        ind = rows.index[0]
+    
+        rows = rows.drop([ind])
+        st.session_state.df = rows
 
 
 def show_answer():
@@ -109,6 +113,13 @@ def record():
     data.loc[int(st.session_state.id), 'correct'] = 1
     data.to_csv(loc)
 
+def save():
+    correct = st.session_state.correct_answers
+    if len(correct) > 0:
+        correct_answers = reformat(str(st.session_state.correct_answers))
+        query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
+        run_query(query)
+        st.session_state.correct_answers = []
 
 if 'category' not in st.session_state:
     update()
@@ -117,7 +128,7 @@ if 'category' not in st.session_state:
 button = st.button('Show answer')  # , on_change= show_answer())
 new_clue = st.button('New clue')  # , on_click = update())
 correct = st.button('Correct')
-save = st.button('Save')
+save_button = st.button('Save')
 
 if 'choices' not in st.session_state:
     options = pd.DataFrame(run_query(
@@ -131,7 +142,7 @@ if 'rounds' not in st.session_state:
     st.session_state['rounds'] = list(rounds.round_)
 
 if 'correct_answers' not in st.session_state:
-    st.session_state.correct_answers = []
+    st.session_state['correct_answers'] = list()
 
 filter_cat = st.multiselect(
     'Categories', st.session_state.choices, key='filter_cat', on_change=update)
@@ -139,9 +150,10 @@ filter_round = st.multiselect(
     'Round', st.session_state.rounds, key='filter_round', on_change=update)
 
 df = st.session_state.df
-# str(len(df))
+st.write(str(len(df)))
 if len(df) == 0:
     'df len is 0'
+    save()
     update()
 
 if new_clue:
@@ -150,23 +162,18 @@ if new_clue:
 
 if correct:
     # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-    correct_answers = st.session_state.correct_answers
-    correct_answers.append(st.session_state.id)
-    st.session_state.correct_answers = correct_answers
+    # st.session_state.correct_answers += st.session_state.id
+    # correct_answers = st.session_state.correct_answers
+    st.session_state['correct_answers'].append(st.session_state.id)
+    # st.session_state.correct_answers = correct_answers
     pick_clue()
 # st.session_state
 
 
-def save():
-    correct = st.session_state.correct_answers
-    if len(correct) > 0:
-        correct_answers = reformat(str(st.session_state.correct_answers))
-        query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
-        run_query(query)
-        st.session_state.correct_answers = []
 
 
-if save:
+
+if save_button:
     save()
 
 if button:
@@ -178,12 +185,13 @@ header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
-remaining_clues = st.session_state.df
-st.write(str(len(remaining_clues)))
-if len(remaining_clues) == 0:
-    save()
-    'Saving clues before updating'
-    update()
+# remaining_clues = st.session_state.df
+# st.write(str(len(remaining_clues)))
+# # if len(remaining_clues) == 0:
+# if len(st.session_state.df) == 0:
+#     save()
+#     'Saving clues before updating'
+#     update()
 
 # if correct:
     # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
