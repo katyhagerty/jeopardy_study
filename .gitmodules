@@ -1,0 +1,3 @@
+[submodule "jeopardy_scrape"]
+	path = jeopardy_scrape
+	url = https://github.com/chrisbrickhouse/jeopardy
