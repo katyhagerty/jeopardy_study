@@ -1,7 +1,7 @@
 beautifulsoup4==4.12.3
 nltk==3.8.1
 pandas==1.4.4
-protobuf==5.26.1
+protobuf==5
 selenium==3.141.0
 streamlit==1.33.0
 google
