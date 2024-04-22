@@ -303,7 +303,7 @@ spyder @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_f8f
 spyder-kernels @ file:///opt/concourse/worker/volumes/live/059d55f0-03a0-4257-508f-33bc5a27f54a/volume/spyder-kernels_1647011244321/work
 srsly==1.0.5
 stanfordcorenlp==3.9.1.1
-streamlit==1.33.0
+streamlit==1.18.0
 streamlit-authenticator==0.2.2
 streamlit-space==0.1.5
 streamlit-toggle==0.1.3
