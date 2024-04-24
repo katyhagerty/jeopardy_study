@@ -72,7 +72,7 @@ def update():
     else:
         filters = f'WHERE {filters[0]}'
 
-    query_text = f'SELECT id,category,text,target FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 100'
+    query_text = f'SELECT id,category,text,target,date,value,daily_double FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 100'
     # query_text
     rows = run_query(query_text)
 
@@ -96,6 +96,9 @@ def pick_clue():
         st.session_state.category = rows['category'].iloc[0]
         st.session_state.clue = rows['text'].iloc[0]
         st.session_state.answer = rows['target'].iloc[0]
+        st.session_state.date = rows['date'].iloc[0]
+        st.session_state.value = rows['value'].iloc[0]
+        st.session_state.daily_double = rows['daily_double'].iloc[0]
     
         ind = rows.index[0]
     
@@ -150,7 +153,7 @@ filter_round = st.multiselect(
     'Round', st.session_state.rounds, key='filter_round', on_change=update)
 
 df = st.session_state.df
-st.write(str(len(df)))
+# st.write(str(len(df)))
 if len(df) == 0:
     'df len is 0'
     save()
@@ -169,10 +172,6 @@ if correct:
     pick_clue()
 # st.session_state
 
-
-
-
-
 if save_button:
     save()
 
@@ -181,10 +180,17 @@ if button:
 else:
     target = st.empty()
 
+
+
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
 target = st.empty()
 
+with st.expander("Clue info:", expanded=False):
+    st.write(f"Date:          {st.session_state.date}")
+    st.write(f"Value:         {st.session_state.value}")
+    st.write(f"Daily Double:  {st.session_state.daily_double}")
+    
 # remaining_clues = st.session_state.df
 # st.write(str(len(remaining_clues)))
 # # if len(remaining_clues) == 0:
