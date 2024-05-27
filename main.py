@@ -56,8 +56,10 @@ def update():
 
     if len(filters) > 1:
         filters = 'WHERE ' + ' AND '.join(filters)
-    else:
+    elif len(filters) == 1:
         filters = f'WHERE {filters[0]}'
+    else:
+        filters = ''
 
     query_text = f'SELECT id,category,text,target,date,value,daily_double FROM `jeopardy-396902.jeopardy.clues` {filters} order by RAND() LIMIT 100'
     # query_text
@@ -116,7 +118,6 @@ if 'correct_answers' not in st.session_state:
 df = st.session_state.df
 # st.write(str(len(df)))
 if len(df) == 0:
-    save()
     update()
 
 # Frontend
