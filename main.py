@@ -13,8 +13,6 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 
 import time
-from st_login_form import login_form
-
 
 # Create API client.
 @st.cache_resource(ttl=24*3600)  # , validate = clues_remaining)
