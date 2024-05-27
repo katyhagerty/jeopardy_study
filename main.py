@@ -13,17 +13,10 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 
 import time
+from st_login_form import login_form
+
 
 # Create API client.
-
-
-def clues_remaining():
-    if 'df' in st.session_state:
-        if len(st.session_state.df) == 0:
-            return False
-    return True
-
-
 @st.cache_resource(ttl=24*3600)  # , validate = clues_remaining)
 def create_connection():
     # create_connection
@@ -31,10 +24,6 @@ def create_connection():
         st.secrets["gcp_service_account"])
     client = bigquery.Client(credentials=credentials)
     return client
-
-
-client = create_connection()
-
 
 def run_query(query):
     # st.write(query)
@@ -56,7 +45,7 @@ def reformat(text):
 
 def update():
 
-    filters = ['correct = 0']
+    filters = []
 
     if 'filter_cat' in st.session_state and len(st.session_state.filter_cat) > 0:
         cats = reformat(str(st.session_state.filter_cat))
@@ -96,6 +85,7 @@ def pick_clue():
         st.session_state.category = rows['category'].iloc[0]
         st.session_state.clue = rows['text'].iloc[0]
         st.session_state.answer = rows['target'].iloc[0]
+        st.session_state.display_answer = ''
         st.session_state.date = rows['date'].iloc[0]
         st.session_state.value = rows['value'].iloc[0]
         st.session_state.daily_double = rows['daily_double'].iloc[0]
@@ -105,33 +95,11 @@ def pick_clue():
         rows = rows.drop([ind])
         st.session_state.df = rows
 
-
-def show_answer():
-    if button:
-        target.write(st.session_state.answer)
-
-
-def record():
-    data = load_data(loc)
-    data.loc[int(st.session_state.id), 'correct'] = 1
-    data.to_csv(loc)
-
-def save():
-    correct = st.session_state.correct_answers
-    if len(correct) > 0:
-        correct_answers = reformat(str(st.session_state.correct_answers))
-        query = f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}'
-        run_query(query)
-        st.session_state.correct_answers = []
+client = create_connection()
 
 if 'category' not in st.session_state:
     update()
     # pick_clue()
-
-button = st.button('Show answer')  # , on_change= show_answer())
-new_clue = st.button('New clue')  # , on_click = update())
-correct = st.button('Correct')
-save_button = st.button('Save')
 
 if 'choices' not in st.session_state:
     options = pd.DataFrame(run_query(
@@ -146,64 +114,45 @@ if 'rounds' not in st.session_state:
 
 if 'correct_answers' not in st.session_state:
     st.session_state['correct_answers'] = list()
-
-filter_cat = st.multiselect(
-    'Categories', st.session_state.choices, key='filter_cat', on_change=update)
-filter_round = st.multiselect(
-    'Round', st.session_state.rounds, key='filter_round', on_change=update)
-
+   
 df = st.session_state.df
 # st.write(str(len(df)))
 if len(df) == 0:
-    'df len is 0'
     save()
     update()
+
+# Frontend
+
+answer_button = st.button('Show answer')  # , on_change= show_answer())
+new_clue = st.button('New clue')  # , on_click = update())
+correct = st.button('Correct')
 
 if new_clue:
     # update()
     pick_clue()
 
 if correct:
-    # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-    # st.session_state.correct_answers += st.session_state.id
-    # correct_answers = st.session_state.correct_answers
     st.session_state['correct_answers'].append(st.session_state.id)
-    # st.session_state.correct_answers = correct_answers
     pick_clue()
-# st.session_state
 
-if save_button:
-    save()
 
-if button:
-    target = st.write(st.session_state.answer)
+if answer_button:
+    st.session_state.display_answer = st.session_state.answer
 else:
     target = st.empty()
 
-
+filter_cat = st.multiselect(
+    'Categories', st.session_state.choices, key='filter_cat', on_change=update)
+filter_round = st.multiselect(
+    'Round', st.session_state.rounds, key='filter_round', on_change=update)
 
 header = st.header(st.session_state.category)
 clue_text = st.write(st.session_state.clue)
-target = st.empty()
+target = st.write(st.session_state.display_answer)
 
 with st.expander("Clue info:", expanded=False):
     st.write(f"Date:          {st.session_state.date}")
     st.write(f"Value:         {st.session_state.value}")
     st.write(f"Daily Double:  {st.session_state.daily_double}")
+
     
-# remaining_clues = st.session_state.df
-# st.write(str(len(remaining_clues)))
-# # if len(remaining_clues) == 0:
-# if len(st.session_state.df) == 0:
-#     save()
-#     'Saving clues before updating'
-#     update()
-
-# if correct:
-    # run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id = {st.session_state.id}')
-
-# if len(st.session_state.correct_answers) > 0:
-#     correct_answers = reformat(str(st.session_state.correct_answers))
-#     run_query(f'UPDATE `jeopardy-396902.jeopardy.clues` SET correct = 1 WHERE id IN {correct_answers}')
-#     time.sleep(300)
-# st.session_state
